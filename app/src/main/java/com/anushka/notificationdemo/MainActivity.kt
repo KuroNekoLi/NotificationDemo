@@ -1,5 +1,6 @@
 package com.anushka.notificationdemo
 
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -37,6 +38,33 @@ class MainActivity : AppCompatActivity() {
             tapResultIntent,
             PendingIntent.FLAG_UPDATE_CURRENT
             )
+
+        //action button 1
+        val intent2 = Intent(this,DetailsActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT
+        }
+        val pendingIntent2:PendingIntent = PendingIntent.getActivity(
+            this,
+            0,
+            intent2,
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
+        val action2 :NotificationCompat.Action =
+            NotificationCompat.Action.Builder(0,"Details",pendingIntent2).build()
+
+        //action button 2
+        val intent3 = Intent(this,DetailsActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT
+        }
+        val pendingIntent3:PendingIntent = PendingIntent.getActivity(
+            this,
+            0,
+            intent2,
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
+        val action3 :NotificationCompat.Action =
+            NotificationCompat.Action.Builder(0,"Settings",pendingIntent3).build()
+
         val notification = NotificationCompat.Builder(this@MainActivity,channelID)
             .setContentTitle("Demo Title")
             .setContentText("This is a demo notification")
@@ -44,6 +72,8 @@ class MainActivity : AppCompatActivity() {
             .setAutoCancel(true)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(pendingIntent)
+            .addAction(action2)
+            .addAction(action3)
             .build()
         notificationManager?.notify(notificationId,notification)
 
