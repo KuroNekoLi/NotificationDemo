@@ -11,10 +11,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import androidx.core.app.NotificationCompat
+import androidx.core.app.RemoteInput
 
 class MainActivity : AppCompatActivity() {
     private val channelID = "com.anushka.notificationdemo.channel1"
     private var notificationManager: NotificationManager? = null
+    private val KEY_REPLY = "key_reply"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -39,6 +41,19 @@ class MainActivity : AppCompatActivity() {
             PendingIntent.FLAG_UPDATE_CURRENT
             )
 
+        //reply action
+         val remoteInput : RemoteInput = RemoteInput.Builder(KEY_REPLY).run {
+             setLabel("Insert your name here")
+             build()
+         }
+
+        val replyAction : NotificationCompat.Action = NotificationCompat.Action.Builder(
+            0,
+            "REPLY",
+            pendingIntent)
+            .addRemoteInput(remoteInput)
+            .build()
+
         //action button 1
         val intent2 = Intent(this,DetailsActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT
@@ -59,7 +74,7 @@ class MainActivity : AppCompatActivity() {
         val pendingIntent3:PendingIntent = PendingIntent.getActivity(
             this,
             0,
-            intent2,
+            intent3,
             PendingIntent.FLAG_UPDATE_CURRENT
         )
         val action3 :NotificationCompat.Action =
@@ -71,9 +86,10 @@ class MainActivity : AppCompatActivity() {
             .setSmallIcon(android.R.drawable.ic_dialog_info)
             .setAutoCancel(true)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setContentIntent(pendingIntent)
+//            .setContentIntent(pendingIntent) //註記此
             .addAction(action2)
             .addAction(action3)
+            .addAction(replyAction)
             .build()
         notificationManager?.notify(notificationId,notification)
 
